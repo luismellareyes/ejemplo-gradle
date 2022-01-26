@@ -12,7 +12,7 @@ pipeline {
                         checkout(
                             [$class: 'GitSCM',
                             //Acá reemplazar por el nonbre de branch
-                            branches: [[name: "feature/gradle" ]],
+                            branches: [[name: "feature/maven-gradle" ]],
                             //Acá reemplazar por su propio repositorio
                             userRemoteConfigs: [[url: 'https://github.com/luismellareyes/ejemplo-gradle.git']]])
                     }
@@ -21,12 +21,13 @@ pipeline {
                         sh "gradle clean build"
                         // code
                     }
+
                     stage("Paso 2: Sonar - Análisis Estático"){
                         sh "echo 'Análisis Estático!'"
                         withSonarQubeEnv('sonarqube3') {
                             sh "echo 'Calling sonar by ID!'"
                             // Run Maven on a Unix agent to execute Sonar.
-                            sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build'
+                            sh 'sonarqube -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build'
                         }
                     }
                     stage("Paso 3: Curl Springboot Gradle sleep 20"){
