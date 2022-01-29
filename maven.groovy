@@ -21,7 +21,7 @@ def call(){
         }
     }
     stage("Paso 5: Curl Springboot Gradle sleep 60"){
-        sh "gradle bootRun&"
+        sh "mvnw spring-boot:run"
         sh "sleep 60 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
     }
     stage("Paso 6: Subir Nexus"){
@@ -50,8 +50,8 @@ def call(){
     stage("Paso 8: Levantar Artefacto Jar"){
         sh 'nohup bash java -jar DevOpsUsach2020-0.0.1.jar & >/dev/null'
     }
-    stage("Paso 9: Testear Artefacto - Dormir(Esperar 20sg) "){
-        sh "sleep 20 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
+    stage("Paso 9: Testear Artefacto - Dormir(Esperar 60sg) "){
+        sh "sleep 60 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
     }
 }
 return this;
