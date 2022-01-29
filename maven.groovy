@@ -20,11 +20,13 @@ def call(){
             sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=ejemplo-gradle -Dsonar.java.binaries=build'
         }
     }
-    stage("Paso 5: Curl Springboot Gradle sleep 60"){
+    stage("paso 5: ejecucion de spring boot") {
         sh "mvn spring-boot:run &"
+    }
+    stage("Paso 6: Curl Springboot Gradle sleep 60"){
         sh "sleep 60 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
     }
-    stage("Paso 6: Subir Nexus"){
+    stage("Paso 7: Subir Nexus"){
         nexusPublisher nexusInstanceId: 'nexus',
                 nexusRepositoryId: 'devops-usach',
                 packages: [
@@ -44,13 +46,13 @@ def call(){
                         ]
                 ]
     }
-    stage("Paso 7: Descargar Nexus"){
+    stage("Paso 8: Descargar Nexus"){
         sh ' curl -X GET -u $NEXUS_USER:$NEXUS_PASSWORD "http://nexus:8081/repository/devops-usach-nexus/com/devopsusach2020/DevOpsUsach2020/0.0.1/DevOpsUsach2020-0.0.1.jar" -O'
     }
-    stage("Paso 8: Levantar Artefacto Jar"){
+    stage("Paso 9: Levantar Artefacto Jar"){
         sh 'nohup bash java -jar DevOpsUsach2020-0.0.1.jar & >/dev/null'
     }
-    stage("Paso 9: Testear Artefacto - Dormir(Esperar 60sg) "){
+    stage("Paso 10: Testear Artefacto - Dormir(Esperar 60sg) "){
         sh "sleep 60 && curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing'"
     }
 }
