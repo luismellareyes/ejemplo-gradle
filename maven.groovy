@@ -5,6 +5,7 @@
 */
 def call(){
     stage("Paso 1: Compilar"){
+        sh "echo 'compila'"
         sh "mvn clean compile -e"
     }
     stage("Paso 2: Testear"){
